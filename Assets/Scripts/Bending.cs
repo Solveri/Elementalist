@@ -6,6 +6,7 @@ public class Bending : MonoBehaviour
 {
     [SerializeField] Transform Player;
     [SerializeField] GameObject Fire;
+    [SerializeField] GameObject Rock;
     [SerializeField] Rigidbody2D rb;
     // Start is called before the first frame update
     void Start()
@@ -36,6 +37,15 @@ public class Bending : MonoBehaviour
     }
 
     public void Bending_Fire()
+    {
+        if (Vector3.Distance(Player.transform.position, Fire.transform.position) < 400)
+        {
+            Fire.transform.position = new Vector2(Player.position.x, Player.position.y);
+            Fire.SetActive(true);
+        }
+    }
+
+    public void Bending_Rock()
     {
         if (Vector3.Distance(Player.transform.position, Fire.transform.position) < 400)
         {
