@@ -7,8 +7,11 @@ public class InputManagers : MonoBehaviour
 {
     PlayerInputs playerInputs;
     [SerializeField]Vector2 movement;
+    [SerializeField] bool canJump;
     public static InputManagers instance;
     public Vector2 Movement { get { return movement; } }
+    public bool CanJump { get {  return canJump; }  private set { canJump = value; } }
+
     private void Awake()
     {
         if (instance != null)
@@ -26,6 +29,8 @@ public class InputManagers : MonoBehaviour
         {
             playerInputs = new PlayerInputs();
             playerInputs.InputMap.Movement.performed += i => movement = i.ReadValue<Vector2>();
+            playerInputs.InputMap.Jump.performed += i => canJump = true;
+
             
 
         }
@@ -41,5 +46,10 @@ public class InputManagers : MonoBehaviour
     void Update()
     {
         
+    }
+    public IEnumerator ResetJump()
+    {
+        yield return new WaitForSeconds(0.5f);
+        canJump = false;
     }
 }
