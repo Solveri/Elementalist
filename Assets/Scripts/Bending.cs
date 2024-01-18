@@ -24,24 +24,7 @@ public class Bending : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            Bending_Fire();
-        }
-
-        //Bending ranges
-        //Fire
-        if (Vector3.Distance(Player.transform.position, Fire.transform.position) >= 400)
-        {
-            Fire.transform.position = new Vector2(Player.position.x, Player.position.y);
-            Fire.SetActive(false);
-        }
-    }
-
-    public void Bending_Fire()
-    {
-        if (Vector3.Distance(Player.transform.position, Fire.transform.position) < 400)
-        {
-            Fire.transform.position = new Vector2(Player.position.x, Player.position.y);
-            Fire.SetActive(true);
+            StartCoroutine(Banding_Fire());
         }
     }
 
@@ -49,8 +32,17 @@ public class Bending : MonoBehaviour
     {
         if (Vector3.Distance(Player.transform.position, Fire.transform.position) < 400)
         {
-            Fire.transform.position = new Vector2(Player.position.x, Player.position.y);
-            Fire.SetActive(true);
+            Rock.transform.position = new Vector2(Player.position.x, Player.position.y);
+            Rock.SetActive(true);
         }
+    }
+
+    IEnumerator Banding_Fire()
+    {
+        Fire.transform.position = new Vector2(Player.position.x, Player.position.y);
+        Fire.SetActive(true);
+        yield return new WaitForSeconds(0.7f);
+        Fire.transform.position = new Vector2(Player.position.x, Player.position.y);
+        Fire.SetActive(false);
     }
 }
