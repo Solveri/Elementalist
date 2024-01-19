@@ -11,7 +11,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform JumpPoint;
     [SerializeField] private LayerMask ground;
     [SerializeField]bool onGround;
-    
+    [SerializeField] TrailRenderer tr;
+    InputManagers inputManager;
+
+   [SerializeField]private bool canDash;
+    private bool isDashing;
+    [SerializeField]private float dashPower = 200f;
+    private float dashTime = 0.2f;
+    private float dashCooldown = 1f;
     private void Awake()
     {
         
@@ -19,18 +26,36 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        inputManager = InputManagers.instance;
+        canDash = true;
+       
     }
 
     // Update is called once per frame
     void Update()
     {
-        // onGround = Physics2D.CircleCast(JumpPoint.position,10,Vector2.down,2,ground);
-        //onGround = Physics2D.OverlapBox(JumpPoint.position,new Vector2(5,5),0,ground);
-        onGround = Physics2D.BoxCast(JumpPoint.position, new Vector2(0.3511701f, 0.06263132f), 0, Vector2.down, 0.1f, ground);
+        if (canDash && inputManager.HasPressedDash)
+        {
+                StartCoroutine(Dash());
+        }
+      
+            
+            
+       
+
+        onGround = isGrounded();
+    }
+    private bool isGrounded()
+    {
+        return Physics2D.OverlapCircle(JumpPoint.position, 0.2f, ground);
     }
     private void FixedUpdate()
     {
+        if (isDashing)
+        {
+            return;
+        }
+       
         if (InputManagers.instance.Movement != Vector2.zero && onGround)
         {
             
@@ -42,10 +67,10 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            rb.velocity = new Vector2 (rb.velocity.x,rb.velocity.y);
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
         }
 
-        if(InputManagers.instance.CanJump && onGround)
+        if (InputManagers.instance.CanJump && onGround)
         {
 
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -55,5 +80,23 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
+    }
+    private IEnumerator Dash()
+    {
+        canDash = false;
+       inputManager.HasPressedDash = false;
+        isDashing = true;
+        float originalGrav = rb.gravityScale;
+        rb.gravityScale = 0;
+        rb.velocity = new Vector2(inputManager.Movement.x*dashPower,0);
+        tr.emitting = true;
+        yield return new WaitForSeconds(dashTime);
+        tr.emitting = false;
+        rb.gravityScale = originalGrav;
+        isDashing = false;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash= true;
+        
+        
     }
 }
