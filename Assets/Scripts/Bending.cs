@@ -41,7 +41,7 @@ public class Bending : MonoBehaviour
     {
         Fire.transform.position = new Vector2(Player.position.x, Player.position.y);
         Fire.SetActive(true);
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0.4f);
         Fire.transform.position = new Vector2(Player.position.x, Player.position.y);
         Fire.SetActive(false);
     }
