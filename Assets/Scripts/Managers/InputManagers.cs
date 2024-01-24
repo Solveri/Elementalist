@@ -9,10 +9,12 @@ public class InputManagers : MonoBehaviour
     [SerializeField] Vector2 movement;
     [SerializeField] bool canJump;
     [SerializeField] bool hasPressedDash;
+    [SerializeField] bool hasPressedDown;
     public static InputManagers instance;
     public Vector2 Movement { get { return movement; } }
     public bool CanJump { get { return canJump; } private set { canJump = value; } }
     public bool HasPressedDash { get { return hasPressedDash ; } set { hasPressedDash = value; } }
+    public bool HasPressedDown { get { return hasPressedDown; } set { hasPressedDown = value; } }
 
     private void Awake()
     {
@@ -32,6 +34,7 @@ public class InputManagers : MonoBehaviour
             playerInputs = new PlayerInputs();
             playerInputs.InputMap.Movement.performed += i => movement = i.ReadValue<Vector2>();
             playerInputs.InputMap.Jump.performed += i => canJump = true;
+           
             
 
 

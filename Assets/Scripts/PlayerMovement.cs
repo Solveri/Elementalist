@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,9 +14,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]bool onGround;
     [SerializeField] TrailRenderer tr;
     InputManagers inputManager;
+    [SerializeField]Collider2D legs;
 
    [SerializeField]private bool canDash;
     private bool isDashing;
+    
     [SerializeField]private float dashPower = 200f;
     private float dashTime = 0.2f;
     private float dashCooldown = 1f;
@@ -34,20 +37,43 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        onGround = isGrounded();
         if (canDash && inputManager.HasPressedDash)
         {
                 StartCoroutine(Dash());
+        }
+        if (InputManagers.instance.Movement.y == -1 && InputManagers.instance.CanJump)
+        {
+            
+            
+            if (isGrounded().transform.tag == "PassableGround")
+            {
+            legs.isTrigger = true;
+                StartCoroutine(RestColider(legs));
+
+            }
+            
         }
       
             
             
        
 
-        onGround = isGrounded();
+        
     }
-    private bool isGrounded()
+    private Collider2D isGrounded()
     {
         return Physics2D.OverlapCircle(JumpPoint.position, 0.2f, ground);
+    }
+    private bool IsGrounded()
+    {
+        return Physics2D.OverlapCircle(JumpPoint.position, 0.2f, ground);
+    }
+    private IEnumerator RestColider(Collider2D cd)
+    {
+        yield return new WaitForSeconds(1f);
+        cd.isTrigger = false;
+
     }
     private void FixedUpdate()
     {
@@ -70,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
         }
 
-        if (InputManagers.instance.CanJump && onGround)
+        if (InputManagers.instance.CanJump && onGround && InputManagers.instance.Movement.y >=0)
         {
 
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
