@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform JumpPoint;
     [SerializeField] private LayerMask ground;
     [SerializeField]bool onGround;
-    [SerializeField] TrailRenderer tr;
+    
     InputManagers inputManager;
     [SerializeField]Collider2D legs;
 
@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
        
-        if (InputManagers.instance.Movement != Vector2.zero && onGround)
+        if (InputManagers.instance.Movement != Vector2.zero && onGround && !InputManagers.instance.IsDoingAction)
         {
             
             Vector2 movement =  InputManagers.instance.Movement*speed*Time.deltaTime;
@@ -115,9 +115,7 @@ public class PlayerMovement : MonoBehaviour
         float originalGrav = rb.gravityScale;
         rb.gravityScale = 0;
         rb.velocity = new Vector2(inputManager.Movement.x*dashPower,0);
-        tr.emitting = true;
         yield return new WaitForSeconds(dashTime);
-        tr.emitting = false;
         rb.gravityScale = originalGrav;
         isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
@@ -126,3 +124,4 @@ public class PlayerMovement : MonoBehaviour
         
     }
 }
+

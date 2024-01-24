@@ -10,11 +10,15 @@ public class InputManagers : MonoBehaviour
     [SerializeField] bool canJump;
     [SerializeField] bool hasPressedDash;
     [SerializeField] bool hasPressedDown;
+    bool isDoingAction = false;
     public static InputManagers instance;
     public Vector2 Movement { get { return movement; } }
     public bool CanJump { get { return canJump; } private set { canJump = value; } }
     public bool HasPressedDash { get { return hasPressedDash ; } set { hasPressedDash = value; } }
     public bool HasPressedDown { get { return hasPressedDown; } set { hasPressedDown = value; } }
+    [SerializeField] public int Presses { get; private set; }
+    public bool IsDoingAction { get {  return isDoingAction; }  set {  isDoingAction = value; } }
+   
 
     private void Awake()
     {
@@ -34,6 +38,8 @@ public class InputManagers : MonoBehaviour
             playerInputs = new PlayerInputs();
             playerInputs.InputMap.Movement.performed += i => movement = i.ReadValue<Vector2>();
             playerInputs.InputMap.Jump.performed += i => canJump = true;
+            playerInputs.InputMap.MouseClick.performed += i => Presses++;
+            
            
             
 
@@ -66,6 +72,10 @@ public class InputManagers : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         canJump = false;
+    }
+    public void RestPress()
+    {
+        Presses = 0;
     }
    
 }

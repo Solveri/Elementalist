@@ -5,15 +5,24 @@ using UnityEngine;
 public class PlayerAnimationManager : MonoBehaviour
 {
     [SerializeField] Animator animator;
+
+    
     void Start()
     {
         
     }
+    private void Awake()
+    {
 
+       
+    }
     // Update is called once per frame
     void Update()
     {
         animator.SetFloat("MoveX",Mathf.Abs(InputManagers.instance.Movement.x));
+        animator.SetInteger("Presses",InputManagers.instance.Presses);
+        
+        
         if (InputManagers.instance.HasPressedDash)
         {
             animator.SetTrigger("Roll");
@@ -28,4 +37,17 @@ public class PlayerAnimationManager : MonoBehaviour
         }
        
     }
+    public void ForceOutOfAttack()
+    {
+        animator.SetTrigger("ForceOut");
+    }
+    public void ChangeActionTrue()
+    {
+        InputManagers.instance.IsDoingAction = true;
+    }
+    public void ChangeActionFalse()
+    {
+        InputManagers.instance.IsDoingAction = false;
+    }
+    
 }
