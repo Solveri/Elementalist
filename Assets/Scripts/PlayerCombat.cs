@@ -36,6 +36,7 @@ public class PlayerCombat : MonoBehaviour
          */
         
         if (InputManagers.instance.Presses > 0) {
+            
             int currentClicks = InputManagers.instance.Presses;
             time += Time.deltaTime;
             if (time >= 2 )
@@ -45,12 +46,10 @@ public class PlayerCombat : MonoBehaviour
                   
                     InputManagers.instance.RestPress();
                     AnimationManager.ForceOutOfAttack();
-
                     time = 0;
                 }
                 else
                 {
-                    
                     return;
                 }
             }

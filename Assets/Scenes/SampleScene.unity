@@ -156,6 +156,7 @@ MonoBehaviour:
   canJump: 0
   hasPressedDash: 0
   hasPressedDown: 0
+  isDoingAction: 0
 --- !u!4 &137268993
 Transform:
   m_ObjectHideFlags: 0

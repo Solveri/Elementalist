@@ -27,11 +27,11 @@ public class PlayerAnimationManager : MonoBehaviour
         {
             animator.SetTrigger("Roll");
         }
-        if (InputManagers.instance.Movement.x > 0 )
+        if (InputManagers.instance.Movement.x > 0 && !InputManagers.instance.IsDoingAction )
         {
             this.transform.localScale = new Vector3(1,1,1);
         }
-        else if (InputManagers.instance.Movement.x < 0)
+        else if (InputManagers.instance.Movement.x < 0 && !InputManagers.instance.IsDoingAction)
         {
             this.transform.localScale = new Vector3(-1, 1, 1);
         }

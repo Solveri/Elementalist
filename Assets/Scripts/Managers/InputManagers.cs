@@ -10,7 +10,7 @@ public class InputManagers : MonoBehaviour
     [SerializeField] bool canJump;
     [SerializeField] bool hasPressedDash;
     [SerializeField] bool hasPressedDown;
-    bool isDoingAction = false;
+    [SerializeField]bool isDoingAction = false;
     public static InputManagers instance;
     public Vector2 Movement { get { return movement; } }
     public bool CanJump { get { return canJump; } private set { canJump = value; } }
