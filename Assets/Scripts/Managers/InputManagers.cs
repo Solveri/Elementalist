@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class InputManagers : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class InputManagers : MonoBehaviour
     [SerializeField] bool canJump;
     [SerializeField] bool hasPressedDash;
     [SerializeField] bool hasPressedDown;
-    [SerializeField]bool isDoingAction = false;
+    [SerializeField] bool isDoingAction = false;
     public static InputManagers instance;
     public Vector2 Movement { get { return movement; } }
     public bool CanJump { get { return canJump; } private set { canJump = value; } }
@@ -37,17 +38,18 @@ public class InputManagers : MonoBehaviour
         {
             playerInputs = new PlayerInputs();
             playerInputs.InputMap.Movement.performed += i => movement = i.ReadValue<Vector2>();
-            playerInputs.InputMap.Jump.performed += i => canJump = true;
+            playerInputs.InputMap.Jump.performed += i => canJump =true;
+            playerInputs.InputMap.Jump.canceled += i => canJump =false;
             playerInputs.InputMap.MouseClick.performed += i => Presses++;
             
            
             
 
 
-
-
         }
     }
+
+    
 
     // Start is called before the first frame update
     void Start()
@@ -68,9 +70,9 @@ public class InputManagers : MonoBehaviour
         }
 
     }
-    public IEnumerator ResetJump()
+    public void ResetJump()
     {
-        yield return new WaitForSeconds(0.5f);
+        
         canJump = false;
     }
     public void RestPress()
@@ -79,4 +81,3 @@ public class InputManagers : MonoBehaviour
     }
    
 }
-   

@@ -37,22 +37,27 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        onGround = isGrounded();
+       
         if (canDash && inputManager.HasPressedDash)
         {
                 StartCoroutine(Dash());
         }
-        if (InputManagers.instance.Movement.y == -1 && InputManagers.instance.CanJump)
+        onGround = isGrounded();
+       
+
+        if (InputManagers.instance.Movement.y == -1 && InputManagers.instance.CanJump && onGround)
         {
-            
-            
+
+
+           
             if (isGrounded().transform.tag == "PassableGround")
             {
-            legs.isTrigger = true;
+                legs.isTrigger = true;
+                InputManagers.instance.ResetJump();
                 StartCoroutine(RestColider(legs));
 
             }
-            
+
         }
       
             
@@ -61,9 +66,9 @@ public class PlayerMovement : MonoBehaviour
 
         
     }
-    private Collider2D isGrounded()
+    private RaycastHit2D isGrounded()
     {
-        return Physics2D.OverlapCircle(JumpPoint.position, 0.2f, ground);
+        return  Physics2D.BoxCast(JumpPoint.position, new Vector2(0.99598074f, 0.0787792206f), 0,Vector2.down,0.1f,ground);
     }
     private bool IsGrounded()
     {
@@ -71,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private IEnumerator RestColider(Collider2D cd)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
         cd.isTrigger = false;
 
     }
@@ -100,9 +105,9 @@ public class PlayerMovement : MonoBehaviour
         {
 
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            StartCoroutine(InputManagers.instance.ResetJump());
+            InputManagers.instance.ResetJump();
         }
-        if (InputManagers.instance.Movement == Vector2.zero)
+        if (InputManagers.instance.Movement == Vector2.zero && onGround)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
